@@ -25,6 +25,7 @@ app.use('/api/auth',     require('./routes/auth.routes'));
 app.use('/api/items',    require('./routes/item.routes'));
 app.use('/api/messages', require('./routes/message.routes'));
 app.use('/api/users',    require('./routes/user.routes'));
+app.use('/api/admin', require('./routes/admin.routes'));
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'OK', timestamp: new Date() }));

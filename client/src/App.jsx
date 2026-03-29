@@ -16,6 +16,7 @@ import Dashboard  from './pages/Dashboard';
 import Messages   from './pages/Messages';
 import Profile    from './pages/Profile';
 import NotFound   from './pages/NotFound';
+import AdminPanel from './pages/AdminPanel';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -36,6 +37,7 @@ const AppRoutes = () => (
         <Route path="/dashboard"  element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/messages"   element={<PrivateRoute><Messages /></PrivateRoute>} />
         <Route path="/profile"    element={<PrivateRoute><Profile /></PrivateRoute>} />
+        <Route path="/admin" element={<PrivateRoute><AdminPanel /></PrivateRoute>} />
         <Route path="*"           element={<NotFound />} />
       </Routes>
     </main>

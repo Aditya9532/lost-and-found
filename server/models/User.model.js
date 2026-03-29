@@ -3,7 +3,18 @@ const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   name:     { type: String, required: true, trim: true },
-  email:    { type: String, required: true, unique: true, lowercase: true },
+  email:    {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    validate: {
+      validator: function(email) {
+        return email.endsWith('@bennett.edu.in');
+      },
+      message: 'Only Bennett University email (@bennett.edu.in) is allowed!'
+    }
+  },
   password: { type: String, required: true, minlength: 6 },
   avatar:   { type: String, default: '' },
   phone:    { type: String, default: '' },
