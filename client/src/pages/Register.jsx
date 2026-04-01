@@ -59,7 +59,12 @@ const Register = () => {
       loginUser(res.data.token, res.data.user);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Please verify credentials.');
+      console.error("Auth Error Logging:", err);
+      // Give the specific backend error if available, else show the broad network error
+      const backendError = err.response?.data?.message;
+      const networkError = err.message || 'Unknown network error occurred.';
+      
+      setError(backendError || `Registration failed. Reason: ${networkError}`);
     } finally {
       setLoading(false);
     }
@@ -83,7 +88,7 @@ const Register = () => {
             <div className="gc-icon">📦</div>
             <div className="gc-text"><h4>Found Item</h4><p>Academic Block • Waiting</p></div>
           </div>
-          <div className="gimmick-card g3" style={{ top: '80%', left: '40%' }}>
+          <div className="gimmick-card g3">
             Bennett Campus Exclusive
           </div>
         </div>

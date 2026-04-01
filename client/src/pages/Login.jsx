@@ -53,7 +53,11 @@ const Login = () => {
       if (res.data.user.role === 'admin') navigate('/admin');
       else navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please verify credentials.');
+      console.error("Auth Error Logging:", err);
+      const backendError = err.response?.data?.message;
+      const networkError = err.message || 'Unknown network error occurred.';
+      
+      setError(backendError || `Login failed. Reason: ${networkError}`);
     } finally {
       setLoading(false);
     }

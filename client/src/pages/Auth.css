@@ -63,9 +63,9 @@
 .gc-text h4 { font-family: 'Syne', sans-serif; font-size: 13px; margin:0 0 4px; color: #fff; }
 .gc-text p { font-size: 11px; color: rgba(255,107,53,0.8); margin:0; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
 
-.g1 { top: 20%; left: 10%; animation-duration: 6s; transform: rotate(-5deg); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-.g2 { bottom: 25%; right: 15%; animation-duration: 8s; animation-delay: -3s; transform: rotate(5deg); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-.g3 { top: 60%; left: 60%; background: linear-gradient(135deg, rgba(255,107,53,0.9), rgba(245,158,11,0.9)); color: #fff; border:none; padding:10px 20px; border-radius: 50px; font-weight: 700; font-family: 'Syne', sans-serif; animation-duration: 5s; animation-delay: -1s; }
+.g1 { top: 10%; right: 8%; animation-duration: 6s; transform: rotate(5deg); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+.g2 { bottom: 12%; left: 8%; animation-duration: 8s; animation-delay: -3s; transform: rotate(-5deg); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+.g3 { bottom: 8%; right: 8%; background: linear-gradient(135deg, rgba(255,107,53,0.9), rgba(245,158,11,0.9)); color: #fff; border:none; padding:10px 20px; border-radius: 50px; font-weight: 700; font-family: 'Syne', sans-serif; animation-duration: 5s; animation-delay: -1s; }
 
 @keyframes floatCard {
   from { transform: translateY(0px) rotate(var(--rot, 0deg)); }
