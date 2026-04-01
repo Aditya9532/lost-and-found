@@ -2,7 +2,7 @@
 
 /* ─── BASE LAYOUT ─── */
 .auth-root {
-  min-height: 100vh;
+  min-height: calc(100vh - 76px);
   background: #050508;
   display: flex;
   font-family: 'DM Sans', sans-serif;
@@ -54,18 +54,20 @@
   background: rgba(255,255,255,0.03);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,0.1);
-  padding: 1rem 1.5rem;
-  border-radius: 16px;
-  display: flex; align-items: center; gap: 12px;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  display: flex; align-items: center; gap: 10px;
   animation: floatCard ease-in-out infinite alternate;
+  z-index: 5;
 }
-.gc-icon { font-size: 24px; padding: 10px; background: rgba(255,107,53,0.15); border-radius: 12px; }
-.gc-text h4 { font-family: 'Syne', sans-serif; font-size: 13px; margin:0 0 4px; color: #fff; }
-.gc-text p { font-size: 11px; color: rgba(255,107,53,0.8); margin:0; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
+.gc-icon { font-size: 18px; padding: 8px; background: rgba(255,107,53,0.15); border-radius: 10px; line-height: 1; }
+.gc-text { display: flex; flex-direction: column; justify-content: center; }
+.gc-text h4 { font-family: 'Syne', sans-serif; font-size: 12px; margin:0 0 2px; color: #fff; }
+.gc-text p { font-size: 9px; color: rgba(255,107,53,0.8); margin:0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
 
-.g1 { top: 10%; right: 8%; animation-duration: 6s; transform: rotate(5deg); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-.g2 { bottom: 12%; left: 8%; animation-duration: 8s; animation-delay: -3s; transform: rotate(-5deg); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-.g3 { bottom: 8%; right: 8%; background: linear-gradient(135deg, rgba(255,107,53,0.9), rgba(245,158,11,0.9)); color: #fff; border:none; padding:10px 20px; border-radius: 50px; font-weight: 700; font-family: 'Syne', sans-serif; animation-duration: 5s; animation-delay: -1s; }
+.g1 { top: 12%; right: 5%; animation-duration: 6s; transform: rotate(4deg); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.g2 { bottom: 8%; left: 5%; animation-duration: 8s; animation-delay: -3s; transform: rotate(-4deg); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.g3 { bottom: 5%; right: 5%; background: linear-gradient(135deg, rgba(255,107,53,0.9), rgba(245,158,11,0.9)); color: #fff; border:none; padding:8px 16px; border-radius: 50px; font-size: 11px; font-weight: 700; font-family: 'Syne', sans-serif; animation-duration: 5s; animation-delay: -1s; }
 
 @keyframes floatCard {
   from { transform: translateY(0px) rotate(var(--rot, 0deg)); }
