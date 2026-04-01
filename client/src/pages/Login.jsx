@@ -177,6 +177,9 @@ const Login = () => {
                   required className="auth-input"
                 />
               </div>
+              <div style={{ textAlign: 'right', marginTop: '4px' }}>
+                <a href="/forgot-password" style={{ fontSize: '12px', color: 'rgba(255,107,53,0.8)', textDecoration: 'none', fontWeight: 600 }}>Forgot password?</a>
+              </div>
             </div>
 
             <button type="submit" disabled={loading} className="auth-btn">
