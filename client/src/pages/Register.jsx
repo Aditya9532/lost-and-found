@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { register } from '../api/auth';
 import { useAuth } from '../context/AuthContext';
@@ -18,7 +18,7 @@ const TypingText = () => {
       setText(currentWord.substring(0, text.length + (isDeleting ? -1 : 1)));
       
       if (!isDeleting && text === currentWord) {
-        setTimeout(() => setIsDeleting(true), 2000); // Pause at full word
+        setTimeout(() => setIsDeleting(true), 2000); 
       } else if (isDeleting && text === '') {
         setIsDeleting(false);
         setWordIdx((prev) => (prev + 1) % words.length);
@@ -31,12 +31,26 @@ const TypingText = () => {
   return <div className="typing-box">{text}<span className="cursor"></span></div>;
 };
 
+// DEV HUD: Diagnoses Network errors specifically built into the DOM
+const AuthDebugger = ({ error }) => {
+  if (!error || !error.includes('Network Error')) return null;
+  const apiUrl = process.env.REACT_APP_API_URL || "NOT DEFINED (falling back to http://localhost:5000/api)";
+  return (
+    <div className="auth-debugger">
+      <span>⚙️ CONNECTION DIAGNOSTICS</span>
+      <div style={{marginTop: '4px'}}><strong>Targeting URL:</strong> {apiUrl}</div>
+      <div style={{opacity: 0.8, marginTop: '2px'}}>If this URL is wrong or missing '/api', your browser blocks the connection instantly.</div>
+    </div>
+  );
+};
+
 const Register = () => {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', password: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { loginUser } = useAuth();
   const navigate = useNavigate();
+  const formRef = useRef(null); // Parallax Engine Hook
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -60,10 +74,8 @@ const Register = () => {
       navigate('/');
     } catch (err) {
       console.error("Auth Error Logging:", err);
-      // Give the specific backend error if available, else show the broad network error
       const backendError = err.response?.data?.message;
       const networkError = err.message || 'Unknown network error occurred.';
-      
       setError(backendError || `Registration failed. Reason: ${networkError}`);
     } finally {
       setLoading(false);
@@ -71,6 +83,22 @@ const Register = () => {
   };
 
   const emailValid = formData.email === '' || formData.email.endsWith('@bennett.edu.in');
+
+  // 3D Parallax Tilt Math
+  const handleMouseMove = (e) => {
+    if (!formRef.current) return;
+    const { left, top, width, height } = formRef.current.getBoundingClientRect();
+    const x = (e.clientX - left) / width - 0.5;
+    const y = (e.clientY - top) / height - 0.5;
+    
+    // Smooth 3D perspective mapping limited to 15deg quadrants
+    formRef.current.style.transform = `rotateY(${x * 15}deg) rotateX(${y * -15}deg)`;
+  };
+
+  const handleMouseLeave = () => {
+    if (!formRef.current) return;
+    formRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
+  };
 
   return (
     <div className="auth-root">
@@ -109,7 +137,12 @@ const Register = () => {
         <div className="auth-orb orb1"></div>
         <div className="auth-orb orb2"></div>
 
-        <div className="auth-form-wrapper" style={{ maxWidth: '440px' }}>
+        <div 
+          className="auth-form-wrapper" 
+          ref={formRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
           <div className="auth-mobile-header">
             <h1 className="sc-title sc-title-accent">LostFound.</h1>
           </div>
@@ -123,7 +156,15 @@ const Register = () => {
             <span>🛡️</span> Only verified <strong>@bennett.edu.in</strong> accounts are authorized.
           </div>
 
-          {error && <div className="auth-error"><span>⚠️</span> {error}</div>}
+          {error && (
+            <div className="auth-error">
+              <div style={{ fontSize: '16px' }}>⚠️</div>
+              <div style={{ flex: 1 }}>
+                {error}
+                <AuthDebugger error={error} />
+              </div>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="auth-form">
             

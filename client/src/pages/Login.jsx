@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../api/auth';
 import { useAuth } from '../context/AuthContext';
@@ -18,7 +18,7 @@ const TypingText = () => {
       setText(currentWord.substring(0, text.length + (isDeleting ? -1 : 1)));
       
       if (!isDeleting && text === currentWord) {
-        setTimeout(() => setIsDeleting(true), 2000); // Pause at full word
+        setTimeout(() => setIsDeleting(true), 2000); 
       } else if (isDeleting && text === '') {
         setIsDeleting(false);
         setWordIdx((prev) => (prev + 1) % words.length);
@@ -31,12 +31,26 @@ const TypingText = () => {
   return <div className="typing-box">{text}<span className="cursor"></span></div>;
 };
 
+// HUD to combat Netlify/Render deployment silent failures
+const AuthDebugger = ({ error }) => {
+  if (!error || !error.includes('Network Error')) return null;
+  const apiUrl = process.env.REACT_APP_API_URL || "NOT DEFINED (falling back to http://localhost:5000/api)";
+  return (
+    <div className="auth-debugger">
+      <span>⚙️ CONNECTION DIAGNOSTICS</span>
+      <div style={{marginTop: '4px'}}><strong>Targeting URL:</strong> {apiUrl}</div>
+      <div style={{opacity: 0.8, marginTop: '2px'}}>If this URL is wrong or missing '/api', your browser blocks the connection instantly.</div>
+    </div>
+  );
+};
+
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState('');
   const { loginUser }           = useAuth();
   const navigate                = useNavigate();
+  const formRef                 = useRef(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -56,11 +70,26 @@ const Login = () => {
       console.error("Auth Error Logging:", err);
       const backendError = err.response?.data?.message;
       const networkError = err.message || 'Unknown network error occurred.';
-      
       setError(backendError || `Login failed. Reason: ${networkError}`);
     } finally {
       setLoading(false);
     }
+  };
+
+  // 3D Parallax Tilt Math
+  const handleMouseMove = (e) => {
+    if (!formRef.current) return;
+    const { left, top, width, height } = formRef.current.getBoundingClientRect();
+    const x = (e.clientX - left) / width - 0.5;
+    const y = (e.clientY - top) / height - 0.5;
+    
+    // Rotate maximally by 15 degrees natively based on quadrant
+    formRef.current.style.transform = `rotateY(${x * 15}deg) rotateX(${y * -15}deg)`;
+  };
+
+  const handleMouseLeave = () => {
+    if (!formRef.current) return;
+    formRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
   };
 
   return (
@@ -100,7 +129,12 @@ const Login = () => {
         <div className="auth-orb orb1"></div>
         <div className="auth-orb orb2"></div>
 
-        <div className="auth-form-wrapper">
+        <div 
+          className="auth-form-wrapper" 
+          ref={formRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
           <div className="auth-mobile-header">
             <h1 className="sc-title sc-title-accent">LostFound.</h1>
           </div>
@@ -110,7 +144,15 @@ const Login = () => {
             <Link to="/register" className="auth-tab">Register</Link>
           </div>
 
-          {error && <div className="auth-error"><span>⚠️</span> {error}</div>}
+          {error && (
+            <div className="auth-error">
+              <div style={{ fontSize: '16px' }}>⚠️</div>
+              <div style={{ flex: 1 }}>
+                {error}
+                <AuthDebugger error={error} />
+              </div>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="auth-form">
             <div className="auth-group" style={{ "--delay": 1 }}>
