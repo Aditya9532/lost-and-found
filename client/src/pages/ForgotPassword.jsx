@@ -20,7 +20,14 @@ const ForgotPassword = () => {
       await forgotPassword(email);
       setSent(true);
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong. Please try again.');
+      console.error('Forgot password error:', err);
+      const backendMsg = err.response?.data?.message;
+      const networkMsg = err.message || 'Unknown error';
+      if (backendMsg) {
+        setError(backendMsg);
+      } else {
+        setError(`Request failed. Reason: ${networkMsg}`);
+      }
     } finally {
       setLoading(false);
     }
