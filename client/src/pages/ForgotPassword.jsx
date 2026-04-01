@@ -17,7 +17,10 @@ const ForgotPassword = () => {
     setLoading(true);
     setError('');
     try {
-      await forgotPassword(email);
+      const timeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Request timed out. The server may be starting up — please try again in 30 seconds.')), 15000)
+      );
+      await Promise.race([forgotPassword(email), timeout]);
       setSent(true);
     } catch (err) {
       console.error('Forgot password error:', err);
