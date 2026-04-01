@@ -13,9 +13,15 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
+    // Only redirect if it's a 401 and NOT an auth request (like login/register)
+    const isAuthRoute = err.config?.url?.includes('/auth/login') || err.config?.url?.includes('/auth/register');
+    
+    if (err.response?.status === 401 && !isAuthRoute) {
       localStorage.removeItem('token');
-      window.location.href = '/login';
+      // Prevent redirect loops if already on login page
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(err);
   }
