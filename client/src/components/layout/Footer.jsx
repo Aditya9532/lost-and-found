@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => (
   <footer className="footer">
-    <p>© {new Date().getFullYear()} LostFound — College Campus Edition</p>
+    <p>© {new Date().getFullYear()} <strong>Back2U</strong> — Bennett University Campus Network</p>
   </footer>
 );
 

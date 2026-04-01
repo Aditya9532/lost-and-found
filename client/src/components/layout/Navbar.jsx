@@ -17,6 +17,7 @@ const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
   const [showNotif, setShowNotif]   = useState(false);
   const [menuOpen, setMenuOpen]     = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const notifRef = useRef(null);
 
   // Fetch unread count
@@ -63,7 +64,7 @@ const Navbar = () => {
         }, ...prev].slice(0, 5));
         // Browser notification
         if (Notification.permission === 'granted') {
-          new Notification('New Message — LostFound', {
+          new Notification('New Message — Back2U', {
             body: `${data.sender?.name || 'Someone'}: ${data.content}`,
             icon: '/favicon.ico',
           });
@@ -109,7 +110,7 @@ const Navbar = () => {
       {/* Brand */}
       <Link to="/" className="nav-brand">
         <span className="brand-icon">🔍</span>
-        <span className="brand-name">LostFound</span>
+        <span className="brand-name">Back2U</span>
       </Link>
 
       {/* Desktop Links */}
@@ -125,6 +126,14 @@ const Navbar = () => {
             </Link>
           </>
         )}
+      </div>
+
+      {/* Hamburger Icon */}
+      <div 
+        className={`hamburger ${mobileMenuOpen ? 'active' : ''}`} 
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+      >
+        <span></span><span></span><span></span>
       </div>
 
       {/* Right Side */}
@@ -240,6 +249,34 @@ const Navbar = () => {
             <Link to="/register" className="nav-register">Register</Link>
           </div>
         )}
+      </div>
+
+      {/* Mobile Menu Drawer */}
+      <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
+        <div className="mobile-links">
+          <Link to="/" className="mobile-link" onClick={() => setMobileMenuOpen(false)}>Browse Campus</Link>
+          {user ? (
+            <>
+              <Link to="/post" className="mobile-link highlight-link" onClick={() => setMobileMenuOpen(false)}>+ Post Broken/Found Item</Link>
+              <Link to="/dashboard" className="mobile-link" onClick={() => setMobileMenuOpen(false)}>My Activity</Link>
+              <Link to="/messages" className="mobile-link" onClick={() => setMobileMenuOpen(false)}>Messages {unread > 0 && <span className="m-badge">{unread}</span>}</Link>
+              <div className="m-divider"></div>
+              <div className="m-user-info">
+                <div className="m-avatar">{user.avatar ? <img src={user.avatar} alt="av"/> : user.name?.charAt(0).toUpperCase()}</div>
+                <div>
+                  <div className="m-name">{user.name}</div>
+                  <div className="m-email">{user.email}</div>
+                </div>
+              </div>
+              <button className="mobile-logout" onClick={handleLogout}>🚪 Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="mobile-link" onClick={() => setMobileMenuOpen(false)}>Secure Login</Link>
+              <Link to="/register" className="mobile-link highlight-link" onClick={() => setMobileMenuOpen(false)}>Create Account</Link>
+            </>
+          )}
+        </div>
       </div>
     </nav>
   );

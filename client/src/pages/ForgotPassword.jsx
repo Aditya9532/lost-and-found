@@ -48,7 +48,7 @@ const ForgotPassword = () => {
           {/* Brand */}
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <h1 className="sc-title" style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', marginBottom: '0.5rem' }}>
-              <span className="sc-title-accent">LostFound.</span>
+              <span className="sc-title-accent">Back2U.</span>
             </h1>
             <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px' }}>Bennett University Campus Network</p>
           </div>

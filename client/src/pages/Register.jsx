@@ -144,7 +144,7 @@ const Register = () => {
           onMouseLeave={handleMouseLeave}
         >
           <div className="auth-mobile-header">
-            <h1 className="sc-title sc-title-accent">LostFound.</h1>
+            <h1 className="sc-title sc-title-accent">Back2U.</h1>
           </div>
 
           <div className="auth-tabs">

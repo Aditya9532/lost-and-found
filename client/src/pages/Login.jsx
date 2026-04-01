@@ -117,7 +117,7 @@ const Login = () => {
           <div className="sc-brand-badge"><span>🌐</span> V2.0 Premium Platform</div>
           <h1 className="sc-title">
             Welcome Back to <br />
-            <span className="sc-title-accent">LostFound.</span>
+            <span className="sc-title-accent">Back2U.</span>
           </h1>
           <p className="sc-desc">Log in securely with your Bennett University credentials to access a centralized campus network for recovering what's yours.</p>
           <TypingText />
@@ -136,7 +136,7 @@ const Login = () => {
           onMouseLeave={handleMouseLeave}
         >
           <div className="auth-mobile-header">
-            <h1 className="sc-title sc-title-accent">LostFound.</h1>
+            <h1 className="sc-title sc-title-accent">Back2U.</h1>
           </div>
 
           <div className="auth-tabs">

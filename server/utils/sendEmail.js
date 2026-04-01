@@ -15,7 +15,7 @@ const sendEmail = async ({ to, subject, html }) => {
   });
 
   await transporter.sendMail({
-    from: `"LostFound Campus" <${process.env.EMAIL_USER}>`,
+    from: `"Back2U Campus" <${process.env.EMAIL_USER}>`,
     to,
     subject,
     html,

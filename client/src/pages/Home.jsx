@@ -378,7 +378,7 @@ const Home = () => {
             <p className="results-count">{totalCount} item{totalCount !== 1 ? 's' : ''} found</p>
             <div className="items-grid">
               {items.map((item, idx) => (
-                <Link to={`/items/${item._id}`} key={item._id} className="item-card" style={{ '--card-idx': idx }}>
+                <Link to={`/items/${item._id}`} key={item._id} className="item-card glass-shine" style={{ '--card-idx': idx }}>
                   <div className="card-image">
                     {item.images && item.images.length > 0 ? (
                       <img src={item.images[0].url} alt={item.title} className="card-img" />
@@ -432,7 +432,7 @@ const Home = () => {
             <h3>Can't find what you're looking for?</h3>
             <p>Post your lost item and let the campus community help you!</p>
           </div>
-          <Link to={user ? '/post' : '/register'} className="cta-btn cta-primary">
+          <Link to={user ? '/post' : '/register'} className="cta-btn cta-primary hover-float">
             + Post an Item
           </Link>
         </div>
