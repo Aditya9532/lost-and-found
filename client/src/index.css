@@ -1,19 +1,65 @@
+/* ─── RESET & GLOBALS ──────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', sans-serif; color: #1a1a2e; background: #f8f9fa; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  color: #fff;
+  background: #0a0a0f;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 a { text-decoration: none; color: inherit; }
 
-.navbar {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 1rem 2rem; background: #1a1a2e; color: white; position: sticky; top: 0; z-index: 100;
-}
-.navbar-brand a { font-size: 1.4rem; font-weight: 700; color: #f0c040; }
-.navbar-links { display: flex; gap: 1.2rem; align-items: center; }
-.navbar-links a { color: #ccc; transition: color .2s; }
-.navbar-links a:hover { color: white; }
-.navbar-links button { background: #e74c3c; color: white; border: none; padding: .4rem .9rem; border-radius: 6px; cursor: pointer; }
+img { display: block; max-width: 100%; }
 
-.main-content { min-height: calc(100vh - 130px); padding: 2rem; max-width: 1200px; margin: 0 auto; }
-.footer { text-align: center; padding: 1.5rem; background: #1a1a2e; color: #888; font-size: .9rem; }
-.loading { display: flex; justify-content: center; align-items: center; height: 200px; font-size: 1.2rem; }
-.page h1 { margin-bottom: 1rem; }
+button { font-family: inherit; }
+
+/* Text selection */
+::selection { background: rgba(255,107,53,0.3); color: #fff; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
+::-webkit-scrollbar-thumb { background: rgba(255,107,53,0.4); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,107,53,0.65); }
+
+/* ─── LAYOUT ───────────────────────────────────────────── */
+.main-content {
+  min-height: calc(100vh - 64px);
+  /* items sections have their own max-width and padding */
+}
+
+/* ─── PAGE FADE ────────────────────────────────────────── */
+.main-content > * {
+  animation: pageFadeIn 0.35s ease both;
+}
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── LOADING STATE ────────────────────────────────────── */
+.loading {
+  display: flex; justify-content: center; align-items: center;
+  height: 200px; font-size: 1.2rem; color: rgba(255,255,255,0.4);
+}
+.loading-spinner {
+  width: 36px; height: 36px;
+  border: 3px solid rgba(255,107,53,0.15);
+  border-top-color: #ff6b35;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+  margin: 0 auto 1rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── FOOTER ───────────────────────────────────────────── */
+.footer {
+  text-align: center; padding: 1.5rem; 
+  background: rgba(255,255,255,0.02);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.25); font-size: .85rem;
+}

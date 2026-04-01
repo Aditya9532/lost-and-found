@@ -16,6 +16,30 @@ const CATEGORIES = [
   { value: 'other',       label: 'Other',       icon: '📦' },
 ];
 
+// College block groups
+const BLOCK_GROUPS = [
+  {
+    group: '🏫 Academic Blocks',
+    blocks: ['A', 'B', 'N', 'P'],
+  },
+  {
+    group: '🏠 Boys Hostel (C)',
+    blocks: ['C1','C2','C3','C4','C5','C6','C7','C8','C9','C10','C11','C12'],
+  },
+  {
+    group: '🏠 Girls Hostel (D)',
+    blocks: ['D1','D2','D3','D4','D5','D6'],
+  },
+  {
+    group: '🏅 Sports',
+    blocks: ['K'],
+  },
+  {
+    group: '📌 Other',
+    blocks: ['Other'],
+  },
+];
+
 const PostItem = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -32,7 +56,7 @@ const PostItem = () => {
     description: '',
     category: '',
     address: '',
-    city: '',
+    block: '',
     dateLostFound: '',
     reward: '',
     tags: '',
@@ -62,6 +86,7 @@ const PostItem = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.category) { setError('Please select a category'); return; }
+    if (!formData.block)    { setError('Please select a block location'); return; }
     if (!formData.dateLostFound) { setError('Please select a date'); return; }
 
     setLoading(true);
@@ -72,7 +97,7 @@ const PostItem = () => {
       data.append('description', formData.description);
       data.append('category', formData.category);
       data.append('location[address]', formData.address);
-      data.append('location[city]', formData.city);
+      data.append('location[block]', formData.block);
       data.append('dateLostFound', formData.dateLostFound);
       data.append('reward', formData.reward || 0);
       if (formData.tags) {
@@ -173,31 +198,45 @@ const PostItem = () => {
             />
           </div>
 
-          {/* Location */}
-          <div className="form-row">
-            <div className="form-group">
-              <label className="form-label">
-                {type === 'lost' ? '📍 Where did you lose it? *' : '📍 Where did you find it? *'}
-              </label>
-              <input
-                type="text" name="address" value={formData.address}
-                onChange={handleChange} required
-                placeholder="e.g. Main Library, 2nd Floor"
-                className="form-input"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">City *</label>
-              <input
-                type="text" name="city" value={formData.city}
-                onChange={handleChange} required
-                placeholder="e.g. Delhi"
-                className="form-input"
-              />
+          {/* Location – Block Selector */}
+          <div className="form-group">
+            <label className="form-label">
+              {type === 'lost' ? '🏢 Block where you lost it *' : '🏢 Block where you found it *'}
+            </label>
+            <div className="block-selector">
+              {BLOCK_GROUPS.map(group => (
+                <div key={group.group} className="block-group">
+                  <p className="block-group-label">{group.group}</p>
+                  <div className="block-chips">
+                    {group.blocks.map(b => (
+                      <button
+                        key={b} type="button"
+                        className={`block-chip ${formData.block === b ? 'block-active' : ''}`}
+                        onClick={() => setFormData({ ...formData, block: b })}
+                      >
+                        {b}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Date */}
+          {/* Specific spot (optional) */}
+          <div className="form-group">
+            <label className="form-label">
+              📍 Specific Spot <span className="form-optional">(optional)</span>
+            </label>
+            <input
+              type="text" name="address" value={formData.address}
+              onChange={handleChange}
+              placeholder="e.g. Near cafeteria entrance, 2nd floor corridor..."
+              className="form-input"
+            />
+          </div>
+
+          {/* Date + Reward */}
           <div className="form-row">
             <div className="form-group">
               <label className="form-label">
@@ -245,7 +284,7 @@ const PostItem = () => {
 
           {/* Tags */}
           <div className="form-group">
-            <label className="form-label">🏷 Tags (optional, comma separated)</label>
+            <label className="form-label">🏷 Tags <span className="form-optional">(optional, comma separated)</span></label>
             <input
               type="text" name="tags" value={formData.tags}
               onChange={handleChange}

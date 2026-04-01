@@ -163,7 +163,7 @@ const AdminPanel = () => {
                       <th>Type</th>
                       <th>Category</th>
                       <th>Posted By</th>
-                      <th>City</th>
+                      <th>Block</th>
                       <th>Date</th>
                       <th>Status</th>
                       <th>Actions</th>
@@ -186,7 +186,7 @@ const AdminPanel = () => {
                           <div>{item.postedBy?.name}</div>
                           <div className="td-email">{item.postedBy?.email}</div>
                         </td>
-                        <td className="td-muted">{item.location?.city}</td>
+                        <td className="td-muted">Block {item.location?.block}</td>
                         <td className="td-muted">{new Date(item.createdAt).toLocaleDateString('en-IN')}</td>
                         <td>
                           <select

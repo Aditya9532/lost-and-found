@@ -182,7 +182,7 @@ const Dashboard = () => {
                     <h4 className="dash-card-title">{item.title}</h4>
                     <p className="dash-card-desc">{item.description}</p>
                     <div className="dash-card-meta">
-                      <span>📍 {item.location?.city}</span>
+                      <span>🏢 Block {item.location?.block}</span>
                       <span>📅 {new Date(item.dateLostFound).toLocaleDateString('en-IN')}</span>
                       {item.reward > 0 && <span>💰 ₹{item.reward}</span>}
                     </div>

@@ -7,16 +7,42 @@ exports.createItem = async (req, res) => {
 };
 
 exports.getItems = async (req, res) => {
-  const { type, category, city, status = 'active', search, page = 1, limit = 12 } = req.query;
-  const query = { status };
-  if (type)     query.type = type;
-  if (category) query.category = category;
-  if (city)     query['location.city'] = new RegExp(city, 'i');
-  if (search)   query.$text = { $search: search };
+  const {
+    type, category, block, status = 'active',
+    search, page = 1, limit = 12,
+    rewardOnly, dateFrom, dateTo, sortBy = 'newest'
+  } = req.query;
+
+  const query = {};
+
+  // Status filter — if 'all' is passed skip; otherwise default to active
+  if (status !== 'all') query.status = status;
+
+  if (type)      query.type = type;
+  if (category)  query.category = category;
+  if (block && block !== 'all') query['location.block'] = block;
+  if (search)    query.$text = { $search: search };
+  if (rewardOnly === 'true') query.reward = { $gt: 0 };
+
+  // Date range filter on dateLostFound
+  if (dateFrom || dateTo) {
+    query.dateLostFound = {};
+    if (dateFrom) query.dateLostFound.$gte = new Date(dateFrom);
+    if (dateTo)   query.dateLostFound.$lte = new Date(dateTo + 'T23:59:59');
+  }
+
+  // Sort
+  const sortMap = {
+    newest:   '-createdAt',
+    oldest:   'createdAt',
+    recent:   '-dateLostFound',
+    reward:   '-reward',
+  };
+  const sort = sortMap[sortBy] || '-createdAt';
 
   const skip = (page - 1) * limit;
   const [items, total] = await Promise.all([
-    Item.find(query).populate('postedBy', 'name avatar').sort('-createdAt').skip(skip).limit(+limit),
+    Item.find(query).populate('postedBy', 'name avatar').sort(sort).skip(skip).limit(+limit),
     Item.countDocuments(query),
   ]);
   res.json({ success: true, items, total, pages: Math.ceil(total / limit), page: +page });

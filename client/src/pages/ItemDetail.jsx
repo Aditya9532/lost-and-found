@@ -166,7 +166,12 @@ const ItemDetail = () => {
                 <span className="info-icon">📍</span>
                 <div>
                   <div className="info-label">Location</div>
-                  <div className="info-value">{item.location?.address}, {item.location?.city}</div>
+                  <div className="info-value">
+                    <span className="block-tag">🏢 Block {item.location?.block}</span>
+                    {item.location?.address && (
+                      <span className="address-sub"> — {item.location.address}</span>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="info-row">
