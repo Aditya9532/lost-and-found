@@ -138,7 +138,7 @@ const AdminPanel = () => {
             <div className="admin-section-header">
               <h2 className="section-title">All Items ({items.length})</h2>
               <div className="filter-row">
-                {['all','active','claimed','resolved','expired'].map(f => (
+                {['all','pending','active','claimed','resolved','expired'].map(f => (
                   <button
                     key={f}
                     className={`filter-btn ${filter === f ? 'filter-active' : ''}`}
@@ -194,20 +194,43 @@ const AdminPanel = () => {
                             value={item.status}
                             onChange={e => updateStatus(item._id, e.target.value)}
                           >
+                            <option value="pending">Pending</option>
                             <option value="active">Active</option>
                             <option value="claimed">Claimed</option>
                             <option value="resolved">Resolved</option>
                             <option value="expired">Expired</option>
+                            <option value="rejected">Rejected</option>
                           </select>
                         </td>
                         <td>
-                          <button
-                            className="del-btn"
-                            onClick={() => deleteItem(item._id)}
-                            disabled={deleting === item._id}
-                          >
-                            {deleting === item._id ? '...' : '🗑 Delete'}
-                          </button>
+                          {item.status === 'pending' ? (
+                            <div style={{ display: 'flex', gap: '6px' }}>
+                              <button 
+                                className="del-btn" style={{ background: 'rgba(16,185,129,0.1)', color: '#10b981', borderColor: 'rgba(16,185,129,0.3)' }}
+                                onClick={() => updateStatus(item._id, 'active')}
+                              >✅</button>
+                              <button 
+                                className="del-btn" style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', borderColor: 'rgba(239,68,68,0.3)' }}
+                                onClick={() => updateStatus(item._id, 'rejected')}
+                              >❌</button>
+                              <button
+                                className="del-btn"
+                                onClick={() => deleteItem(item._id)}
+                                disabled={deleting === item._id}
+                                title="Delete Permanently"
+                              >
+                                {deleting === item._id ? '...' : '🗑'}
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              className="del-btn"
+                              onClick={() => deleteItem(item._id)}
+                              disabled={deleting === item._id}
+                            >
+                              {deleting === item._id ? '...' : '🗑 Delete'}
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}

@@ -24,7 +24,7 @@ const itemSchema = new mongoose.Schema({
     required: true
   },
   images:      [{ url: String, publicId: String }],
-  status:      { type: String, enum: ['active', 'claimed', 'resolved', 'expired'], default: 'active' },
+  status:      { type: String, enum: ['pending', 'active', 'claimed', 'resolved', 'expired', 'rejected'], default: 'pending' },
   location: {
     address: { type: String, required: true },   // Specific spot (e.g. "Near cafeteria entrance")
     block:   { type: String, enum: COLLEGE_BLOCKS, required: true },

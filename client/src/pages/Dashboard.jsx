@@ -61,6 +61,7 @@ const Dashboard = () => {
     found:    items.filter(i => i.type === 'found').length,
     resolved: items.filter(i => i.status === 'resolved').length,
     active:   items.filter(i => i.status === 'active').length,
+    pending:  items.filter(i => i.status === 'pending').length,
   };
 
   return (
@@ -110,6 +111,10 @@ const Dashboard = () => {
             <span className="stat-num">{stats.active}</span>
             <span className="stat-label">Active</span>
           </div>
+          <div className="stat-card">
+            <span className="stat-num">{stats.pending}</span>
+            <span className="stat-label">Pending</span>
+          </div>
         </div>
 
         {/* My Items */}
@@ -122,6 +127,7 @@ const Dashboard = () => {
                 { val: 'lost',     label: '😟 Lost' },
                 { val: 'found',    label: '🙌 Found' },
                 { val: 'active',   label: '🟢 Active' },
+                { val: 'pending',  label: '⏳ Pending' },
                 { val: 'resolved', label: '✅ Resolved' },
               ].map(f => (
                 <button
@@ -168,8 +174,10 @@ const Dashboard = () => {
                     </div>
                     <div className={`dash-status-badge status-${item.status}`}>
                       {item.status === 'active' ? '🟢 Active'
+                        : item.status === 'pending' ? '⏳ Pending Approval'
                         : item.status === 'claimed' ? '🟡 Claimed'
                         : item.status === 'resolved' ? '✅ Resolved'
+                        : item.status === 'rejected' ? '❌ Rejected'
                         : item.status}
                     </div>
                   </div>

@@ -15,8 +15,12 @@ exports.getItems = async (req, res) => {
 
   const query = {};
 
-  // Status filter — if 'all' is passed skip; otherwise default to active
-  if (status !== 'all') query.status = status;
+  // Status filter — explicitly exclude pending/rejected from 'all'
+  if (status === 'all') {
+    query.status = { $nin: ['pending', 'rejected'] };
+  } else {
+    query.status = status;
+  }
 
   if (type)      query.type = type;
   if (category)  query.category = category;
@@ -49,10 +53,34 @@ exports.getItems = async (req, res) => {
 };
 
 exports.getItem = async (req, res) => {
-  const item = await Item.findByIdAndUpdate(
-    req.params.id, { $inc: { views: 1 } }, { new: true }
-  ).populate('postedBy', 'name avatar email phone');
+  const item = await Item.findById(req.params.id).populate('postedBy', 'name avatar email phone');
   if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
+
+  // Security block: Pending or rejected items are hidden from public
+  if (item.status === 'pending' || item.status === 'rejected') {
+    let isAuthorized = false;
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+      try {
+        const jwt = require('jsonwebtoken');
+        const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.JWT_SECRET);
+        const User = require('../models/User.model');
+        const user = await User.findById(decoded.id);
+        if (user && (user.role === 'admin' || item.postedBy._id.toString() === user._id.toString())) {
+          isAuthorized = true;
+        }
+      } catch (err) {}
+    }
+    if (!isAuthorized) {
+      return res.status(403).json({ success: false, message: 'Item is pending admin approval' });
+    }
+  }
+
+  // Only increment views if not pending
+  if (item.status !== 'pending') {
+    item.views += 1;
+    await item.save();
+  }
+
   res.json({ success: true, item });
 };
 
