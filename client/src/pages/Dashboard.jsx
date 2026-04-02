@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getMyItems, deleteItem, updateItem } from '../api/items';
 import { useAuth } from '../context/AuthContext';
+import { getImageUrl } from '../utils/image';
 import './Dashboard.css';
 
 const CATEGORY_ICONS = {
@@ -163,7 +164,7 @@ const Dashboard = () => {
                   {/* Image */}
                   <div className="dash-card-image">
                     {item.images && item.images.length > 0 ? (
-                      <img src={item.images[0].url} alt={item.title} />
+                      <img src={getImageUrl(item.images[0].url)} alt={item.title} />
                     ) : (
                       <div className="dash-no-img">
                         <span>{CATEGORY_ICONS[item.category] || '📦'}</span>

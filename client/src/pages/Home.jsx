@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { getItems } from '../api/items';
 import { useAuth } from '../context/AuthContext';
+import { getImageUrl } from '../utils/image';
 import './Home.css';
 
 const CATEGORY_ICONS = {
@@ -381,7 +382,7 @@ const Home = () => {
                 <Link to={`/items/${item._id}`} key={item._id} className="item-card glass-shine" style={{ '--card-idx': idx }}>
                   <div className="card-image">
                     {item.images && item.images.length > 0 ? (
-                      <img src={item.images[0].url} alt={item.title} className="card-img" />
+                      <img src={getImageUrl(item.images[0].url)} alt={item.title} className="card-img" />
                     ) : (
                       <div className="card-image-placeholder">
                         <span>{CATEGORY_ICONS[item.category] || '📦'}</span>

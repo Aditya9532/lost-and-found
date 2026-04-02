@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getItem, updateItem } from '../api/items';
-import { sendMessage } from '../api/messages';
 import { useAuth } from '../context/AuthContext';
+import { getImageUrl } from '../utils/image';
 import './ItemDetail.css';
 
 const CATEGORY_ICONS = {
@@ -100,7 +100,7 @@ const ItemDetail = () => {
           <div className="detail-left">
             <div className="main-image">
               {item.images && item.images.length > 0 ? (
-                <img src={item.images[activeImg]?.url} alt={item.title} />
+                <img src={getImageUrl(item.images[activeImg]?.url)} alt={item.title} />
               ) : (
                 <div className="no-image">
                   <span>{CATEGORY_ICONS[item.category] || '📦'}</span>
@@ -119,7 +119,7 @@ const ItemDetail = () => {
               <div className="thumbnails">
                 {item.images.map((img, i) => (
                   <img
-                    key={i} src={img.url} alt={`thumb-${i}`}
+                    key={i} src={getImageUrl(img.url)} alt={`thumb-${i}`}
                     className={`thumb ${activeImg === i ? 'thumb-active' : ''}`}
                     onClick={() => setActiveImg(i)}
                   />
