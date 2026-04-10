@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getItem, updateItem } from '../api/items';
+import { getItem, updateItem, claimItem } from '../api/items';
 import { useAuth } from '../context/AuthContext';
 import { getImageUrl } from '../utils/image';
 import './ItemDetail.css';
@@ -51,12 +51,14 @@ const ItemDetail = () => {
   const handleClaim = async () => {
     if (!user) { navigate('/login'); return; }
     setClaiming(true);
+    setError('');
     try {
-      await updateItem(id, { status: 'claimed', claimedBy: user._id });
+      const res = await claimItem(id);
       setClaimed(true);
-      setItem({ ...item, status: 'claimed' });
-    } catch {
-      setError('Failed to claim item. Try again.');
+      setItem({ ...item, status: 'claimed', claimedBy: res.data.item.claimedBy });
+    } catch (err) {
+      const msg = err?.response?.data?.message || 'Failed to claim item. Try again.';
+      setError(msg);
     } finally {
       setClaiming(false);
     }

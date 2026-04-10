@@ -6,3 +6,5 @@ export const createItem  = (data)   => api.post('/items', data, { headers: { 'Co
 export const updateItem  = (id, data) => api.put(`/items/${id}`, data);
 export const deleteItem  = (id)     => api.delete(`/items/${id}`);
 export const getMyItems  = ()       => api.get('/items/my-items');
+export const claimItem   = (id)     => api.post(`/items/${id}/claim`);
+

@@ -93,6 +93,19 @@ exports.updateItem = async (req, res) => {
   res.json({ success: true, item: updated });
 };
 
+exports.claimItem = async (req, res) => {
+  const item = await Item.findById(req.params.id);
+  if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
+  if (item.type !== 'found') return res.status(400).json({ success: false, message: 'Only found items can be claimed' });
+  if (item.status !== 'active') return res.status(400).json({ success: false, message: 'This item is no longer available to claim' });
+  if (item.postedBy.toString() === req.user._id.toString())
+    return res.status(403).json({ success: false, message: 'You cannot claim your own item' });
+  item.status = 'claimed';
+  item.claimedBy = req.user._id;
+  await item.save();
+  res.json({ success: true, item });
+};
+
 exports.deleteItem = async (req, res) => {
   const item = await Item.findById(req.params.id);
   if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
